@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      [x-cloak] {
+        display: none;
+      }
+    </style>
+    <title>حاسبة ضريبة الشرائح</title>
+    <script type="module" crossorigin src="/assets/index-DcrWU14s.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DI-nKdl9.css">
+  </head>
+  <body dir="rtl">
+    <div x-cloak x-data="calculator" class="max-w-[400px] mx-auto p-2 space-y-2" x-trap="true">
+      <h1 class="text-3xl font-bold text-center mb-8 tracking-tighter">حاسبة ضريبة الشرائح</h1>
+      <div>
+        <label for="salary">
+          <span
+            class="text-sm font-medium tracking-tight mb-1 block"
+            :class="{ 'text-red-500': !checkSalary() }"
+            >الراتب المقطوع</span
+          >
+          <input
+            class="w-full border border-neutral-200 px-2 py-1 rounded-md outline-none hover:ring hover:ring-neutral-500 focus:ring focus:ring-neutral-500"
+            :class="{ '!border-red-500 !ring-red-500': !checkSalary() }"
+            type="number"
+            @input="calculate"
+            x-model="salary"
+            :min="minimumSalary"
+            step="1000"
+            placeholder="e.g. 1,000,000"
+            class="w-full"
+            id="salary"
+          />
+        </label>
+        <span
+          x-show="!checkSalary()"
+          class="text-red-500"
+          x-text="'يجب ان يكون الراتب المقطوع أكبر من ' + minimumSalary.toLocaleString()"
+        ></span>
+      </div>
+      <!--  -->
+      <div>
+        <label for="social-security">
+          <span>مشترك في التأمينات الاجتماعية</span>
+          <input
+            @change="calculate"
+            type="checkbox"
+            x-model="socialSecurity"
+            id="social-security"
+          />
+        </label>
+      </div>
+      <!--  -->
+      <div x-show="socialSecurity" x-transition>
+        <label for="social-security-salary">
+          <span
+            class="text-sm font-medium tracking-tight mb-1 block"
+            :class="{ 'text-red-500': !checkSSSalary() }"
+            >راتب التأمينات الاجتماعية</span
+          >
+          <input
+            class="w-full border border-neutral-200 px-2 py-1 rounded-md outline-none hover:ring hover:ring-neutral-500 focus:ring focus:ring-neutral-500"
+            :class="{ '!border-red-500 !ring-red-500': !checkSSSalary() }"
+            type="number"
+            x-model="socialSecuritySalary"
+            :min="minimumSocialSecuritySalary"
+            @input="calculate"
+            step="1000"
+            placeholder="e.g. 750,000"
+            class="w-full"
+            id="social-security-salary"
+          />
+        </label>
+        <span
+          x-show="!checkSSSalary()"
+          class="text-red-500"
+          x-text="'يجب ان يكون راتب التأمينات الاجتماعية أكبر من ' + minimumSocialSecuritySalary.toLocaleString()"
+        ></span>
+      </div>
+      <!--  -->
+      <div class="flex items-center flex-col justify-center gap-2 md:flex-row">
+        <button
+          class="block w-full px-2 py-1 rounded-md bg-green-500 hover:bg-green-600 duration-75 cursor-pointer border border-green-600 disabled:opacity-50 disabled:cursor-not-allowed font-medium outline-none focus:ring focus:ring-green-600 text-white"
+          @click="calculate"
+          :disabled="!allValid()"
+        >
+          احسب
+        </button>
+        <button
+          class="block w-full px-2 py-1 rounded-md bg-neutral-200 hover:bg-neutral-300 duration-75 cursor-pointer border border-neutral-300 font-medium outline-none focus:ring focus:ring-neutral-300"
+          @click="reset"
+        >
+          تصفير
+        </button>
+      </div>
+      <!--  -->
+      <div
+        x-show="allValid()"
+        x-transition
+        class="lg:text-lg space-y-2 font-bold my-4 tracking-tight text-neutral-700"
+      >
+        <div>
+          <span>الراتب: </span>
+          <span x-text="(salary - 0).toLocaleString()"></span>
+        </div>
+        <div x-show="socialSecurity" x-transition>
+          <span>راتب التأمينات الاجتماعية: </span>
+          <span x-text="(socialSecuritySalary - 0).toLocaleString()"></span>
+        </div>
+        <hr />
+        <div>
+          <span>الضريبة: </span>
+          <span x-text="result.toLocaleString()"></span>
+        </div>
+        <hr />
+        <div>
+          <span>الصافي: </span>
+          <span x-text="(salary - result).toLocaleString()"></span>
+        </div>
+      </div>
+      <p class="text-center text-sm text-neutral-500 capitalize">
+        تم الانشاء بواسطة
+        <a target="_blank" class="hover:underline text-black" href="https://fb.com/@abdtt"
+          >عبدالله التتان</a
+        >
+      </p>
+    </div>
+  </body>
+</html>
