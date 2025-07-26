@@ -4,21 +4,25 @@ import "./main.css";
 
 function calculator() {
   return {
+    result: 0,
+    // social security options
     socialSecurity: false,
     socialSecuritySalary: 0,
     minimumSocialSecuritySalary: 750_000,
     socialSecurityRate: 0.07,
+    // salary options
     salary: 837_000,
     minimumSalary: 837_000,
-    roundMethod: "ceil" /* "ceil", "floor", "round" */,
-    roundToNearest: 100,
-    result: 0,
     brackets: [
       { min: 0, max: 837_000, rate: 0 },
       { min: 837_001, max: 850_000, rate: 0.11 },
       { min: 850_001, max: 1_100_000, rate: 0.13 },
       { min: 1_100_001, max: 50_000_000, rate: 0.15 },
     ],
+    // rounding options
+    round: true,
+    roundMethod: "ceil" /* "ceil", "floor", "round" */,
+    roundToNearest: 100,
     init() {
       this.socialSecuritySalary = this.minimumSocialSecuritySalary;
     },
@@ -29,13 +33,16 @@ function calculator() {
       this.result = 0;
     },
     roundTo(amount) {
+      if (!this.round) {
+        return amount;
+      }
       return Math[this.roundMethod](amount / this.roundToNearest) * this.roundToNearest;
     },
     checkSalary() {
       return this.salary >= this.minimumSalary;
     },
     checkSSSalary() {
-      return this.socialSecuritySalary >= this.minimumSocialSecuritySalary
+      return this.socialSecuritySalary >= this.minimumSocialSecuritySalary;
     },
     allValid() {
       return this.checkSalary() && this.checkSSSalary();
@@ -45,6 +52,12 @@ function calculator() {
         return this.salary - this.socialSecurityRate * this.socialSecuritySalary;
       }
       return this.salary;
+    },
+    calculateSocialSecurity() {
+      if (this.socialSecurity) {
+        return this.socialSecuritySalary * this.socialSecurityRate;
+      }
+      return 0;
     },
     calculate() {
       let tax = 0;
