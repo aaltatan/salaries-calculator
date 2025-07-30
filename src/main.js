@@ -1,3 +1,4 @@
+import collapse from "@alpinejs/collapse";
 import focus from "@alpinejs/focus";
 import Alpine from "alpinejs";
 import "./main.css";
@@ -79,6 +80,7 @@ function calculator() {
 window.Alpine = Alpine;
 
 Alpine.plugin(focus);
+Alpine.plugin(collapse);
 Alpine.data("calculator", calculator);
 
 Alpine.start();
